@@ -7,20 +7,16 @@
 struct Anim
 { Rectangle rec;
   Vector2 pos;
-  Vector3 collider;
   int frame;
   //used to slow down fram
   float updateTime;
   float runningTime;
   };
 
-struct ball
-{Rectangle ball;
-Vector2 pos;
-};
 
 
-bool collision{};
+bool CheckCollisionRecCircle;
+
 
 
 //ENTRY POINT TO GET INTO cpp CODING
@@ -40,7 +36,7 @@ int main(){
 
 
 InitWindow(windowWidth,windowHeight,WindowName);
-
+InitAudioDevice();
 
 
 Texture2D sky = LoadTexture("resources/sky.png");
@@ -69,8 +65,6 @@ birdyAnim.runningTime = 0.0;
 
 
 
-
-
 int velocity{0};
 
 
@@ -80,12 +74,11 @@ int speed{400};
     Vector2 ballSpeed = { 8.0f, 6.0f };
     float ballRad = 10;
 
-//Rectangle ball;
-//ball.x = GetScreenWidth() / 2;
-//ball.y = GetScreenHeight() / 2;
-//ball.height = 20;
-//ball.width = 20; 
 
+bool collision;
+
+Music music = LoadMusicStream("resources/Music.wav");
+PlayMusicStream(music);
 
 // Setting the frame per second rate of the game
 SetTargetFPS(60);
@@ -94,7 +87,19 @@ SetTargetFPS(60);
 while (WindowShouldClose() == false){
 		const float deltaTime{GetFrameTime()};
 
+UpdateMusicStream(music);
 
+Rectangle birdyRec{
+	birdyAnim.pos.x,
+	birdyAnim.pos.y,
+	birdyAnim.rec.height,
+	birdyAnim.rec.width
+};
+
+// if (CheckCollisionRecs(birdyRec,ball)==false){
+// 		collision = true;
+
+// }
 
 	if(IsKeyDown(KEY_D))
 {
@@ -105,6 +110,7 @@ while (WindowShouldClose() == false){
 	if(birdyAnim.runningTime >= birdyAnim.updateTime)
 	{
 	birdyAnim.runningTime = 0.0;
+
 	//birdyAnim.rec.x = birdyAnim.frame* birdyAnim.rec.width;
 	birdyAnim.rec.x = birdyAnim.frame* birdyAnim.rec.width;
 	birdyAnim.frame++;
@@ -192,8 +198,6 @@ birdyAnim.rec.x = birdyAnim.frame* birdyAnim.rec.width;}
 
 
 
-
-
 BeginDrawing();
 
 
@@ -205,10 +209,16 @@ birdyAnim.pos.y += velocity * deltaTime;
 
 ClearBackground(SKYBLUE);
 
+
+//if (collision){DrawText("Game Over",300,50,20,DARKGRAY);
+
+//}
+//else{
+DrawText("Save Birdy from the missile!", 100, 100, 50, BLACK);
 DrawTextureRec(sky, skyRec,skyPos, WHITE); skyPos.x -= 1;
 DrawTextureRec(birdy,birdyAnim.rec,birdyAnim.pos,WHITE);
 DrawCircleV(ballPos, ballRad, DARKPURPLE);
-    
+//}
 
 
 
