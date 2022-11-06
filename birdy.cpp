@@ -3,25 +3,29 @@
 
 
 
+//group
 struct Anim
 { Rectangle rec;
   Vector2 pos;
+  Vector3 collider;
   int frame;
+  //used to slow down fram
   float updateTime;
   float runningTime;
   };
 
+struct ball
+{Rectangle ball;
+Vector2 pos;
+};
 
-struct can
-{ Rectangle rec;
-  Vector2 speed;
-  bool active;
-  Color color;
-  };
+
+bool collision{};
 
 
 //ENTRY POINT TO GET INTO cpp CODING
 int main(){
+
 // declaring the variables for the window size
  const int windowWidth{700};
  const int windowHeight{450};
@@ -34,17 +38,14 @@ int main(){
  
  //function to create a window with the above values
 
- int rectangle_posX = 700;
- int rectangle_posY = 100;
- 
 
 InitWindow(windowWidth,windowHeight,WindowName);
-int canVel{-100};
+
 
 
 Texture2D sky = LoadTexture("resources/sky.png");
 Texture2D birdy = LoadTexture ("resources/birdy.png");
-Texture2D can = LoadTexture("resources/can.png");
+
 
 Rectangle skyRec;
 skyRec.width = sky.width*10;
@@ -67,20 +68,23 @@ birdyAnim.updateTime = 1.0/12.0;
 birdyAnim.runningTime = 0.0;
 
 
-Rectangle canRec;
-canRec.width = can.width;
-canRec.height = can.height;
-canRec.x = 0;
-canRec.y = 0;
-Vector2 canPos;
-canPos.x = windowWidth- can.width;
-canPos.y = windowHeight - can.height;
+
 
 
 int velocity{0};
 
 
-int speed{200};
+int speed{400};
+
+ Vector2 ballPos = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
+    Vector2 ballSpeed = { 8.0f, 6.0f };
+    float ballRad = 10;
+
+//Rectangle ball;
+//ball.x = GetScreenWidth() / 2;
+//ball.y = GetScreenHeight() / 2;
+//ball.height = 20;
+//ball.width = 20; 
 
 
 // Setting the frame per second rate of the game
@@ -101,6 +105,7 @@ while (WindowShouldClose() == false){
 	if(birdyAnim.runningTime >= birdyAnim.updateTime)
 	{
 	birdyAnim.runningTime = 0.0;
+	//birdyAnim.rec.x = birdyAnim.frame* birdyAnim.rec.width;
 	birdyAnim.rec.x = birdyAnim.frame* birdyAnim.rec.width;
 	birdyAnim.frame++;
 	if (birdyAnim.frame>5){
@@ -179,13 +184,21 @@ if(IsKeyReleased(KEY_S))
 {birdyAnim.frame = 4;
 birdyAnim.rec.x = birdyAnim.frame* birdyAnim.rec.width;}
 
+ // Bouncing ball logic
+        ballPos.x += ballSpeed.x;
+        ballPos.y += ballSpeed.y;
+        if ((ballPos.x >= (GetScreenWidth() - ballRad)) || (ballPos.x <= ballRad)) ballSpeed.x *= -1.0f;
+        if ((ballPos.y >= (GetScreenHeight() - ballRad)) || (ballPos.y <= ballRad)) ballSpeed.y *= -1.0f;
+
+
+
+
 
 BeginDrawing();
 
 
-
 birdyAnim.pos.y += velocity * deltaTime; 
-canPos.x += canVel * deltaTime;
+
 
 
 
@@ -194,9 +207,8 @@ ClearBackground(SKYBLUE);
 
 DrawTextureRec(sky, skyRec,skyPos, WHITE); skyPos.x -= 1;
 DrawTextureRec(birdy,birdyAnim.rec,birdyAnim.pos,WHITE);
-DrawTextureRec(can,canRec,canPos,WHITE);
-DrawRectangle(rectangle_posX, rectangle_posY, 10, 5, BLACK);
-rectangle_posX -= 4;
+DrawCircleV(ballPos, ballRad, DARKPURPLE);
+    
 
 
 
@@ -204,6 +216,5 @@ EndDrawing();
 }
 UnloadTexture (birdy);
 UnloadTexture (sky);
-UnloadTexture (can);
 CloseWindow();
 }
