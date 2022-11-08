@@ -58,11 +58,11 @@ skyPos.y = windowHeight - skyRec.height;
 
 //int posY{windowHeight-height};
 int obVel{0};
+int speed {400};
 int velocity{0};
-
-
-int speed{400};
 bool collision{};
+Vector2 obPos = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f }; 
+Vector2 obSpeed = { 5.0f, 4.0f };
 
 Music music = LoadMusicStream("resources/Music.wav");
 PlayMusicStream(music);
@@ -79,6 +79,7 @@ UpdateMusicStream(music);
 		obPos.y,
 		obRec.height,
 		obRec.width,
+	
 	};
 	Rectangle birdyRec{
 	birdyAnim.pos.x,
@@ -157,6 +158,11 @@ if(IsKeyReleased(KEY_W))
 {birdyAnim.frame = 4;
 birdyAnim.rec.x = birdyAnim.frame* birdyAnim.rec.width;}
 
+// Bouncing ob logic
+        obPos.x += obSpeed.x;
+        obPos.y += obSpeed.y;
+        if ((obPos.x >= (GetScreenWidth() - obRec.width)) || (obPos.x <= obRec.width)) obSpeed.x *= -1.0f;
+        if ((obPos.y >= (GetScreenHeight() - obRec.height)) || (obPos.y <= obRec.height)) obSpeed.y *= -1.0f;
 
 
 if(IsKeyDown(KEY_S))
@@ -195,14 +201,18 @@ ClearBackground(WHITE);
 
 	}
 	else{
-//DrawRectangle(windowWidth/2,posY,width,height,GREEN);
+
+
+//draw each image/texture to the screeen. the background goes first
+DrawTextureRec(sky, skyRec,skyPos, WHITE); skyPos.x -= 1;
 DrawTextureRec(birdy,birdyAnim.rec,birdyAnim.pos,WHITE);
 DrawTextureRec(obstacle,obRec,obPos,WHITE);
-DrawTextureRec(sky, skyRec,skyPos, WHITE); skyPos.x -= 1;
+DrawText("Save Birdy from the Drone!",10,10,12,DARKGRAY);
 	}
 EndDrawing();
 }
 UnloadTexture(birdy);
 UnloadTexture(obstacle);
+UnloadTexture(sky);
 CloseWindow();
 }
