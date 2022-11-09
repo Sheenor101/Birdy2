@@ -27,8 +27,10 @@ birdyAnim.rec.width = birdy.width/6;
 birdyAnim.rec.height = birdy.height;
 birdyAnim.rec.x = 0;
 birdyAnim.rec.y = 0;
+//starting position of player - x axis
 birdyAnim.pos.x = windowWidth/6 - birdyAnim.rec.width/6;
-birdyAnim.pos.y = windowHeight - birdyAnim.rec.height;
+//starting posion of player - y axis
+birdyAnim.pos.y = windowHeight/2 - birdyAnim.rec.height/2;
 birdyAnim.frame = 0;
 birdyAnim.updateTime = 1.0/12.0;
 birdyAnim.runningTime = 0.0;
