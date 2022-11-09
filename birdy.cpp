@@ -9,8 +9,6 @@ struct Anim
 	float runningTime;  
 };
 
-
-
 int main(){
  const int windowWidth{700};
  const int windowHeight{450};
@@ -40,9 +38,11 @@ obRec.width = obstacle.width;
 obRec.height = obstacle.height; 
 obRec.x = 0;
 obRec.y = 0;
-Vector2 obPos; 
-obPos.x = windowWidth- obRec.width;
-obPos.y = windowHeight - obRec.height;
+//Vector2 obPos; 
+Vector2 obPos = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f }; 
+Vector2 obSpeed = { 7.0f, 5.0f };
+//obPos.x = windowWidth- obRec.width;
+//obPos.y = windowHeight - obRec.height;
 
 Rectangle skyRec;
 skyRec.width = sky.width*10;
@@ -61,8 +61,8 @@ int obVel{0};
 int speed {400};
 int velocity{0};
 bool collision{};
-Vector2 obPos = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f }; 
-Vector2 obSpeed = { 5.0f, 4.0f };
+// Vector2 obPos = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f }; 
+// Vector2 obSpeed = { 5.0f, 4.0f };
 
 Music music = LoadMusicStream("resources/Music.wav");
 PlayMusicStream(music);
@@ -197,7 +197,7 @@ BeginDrawing();
 birdyAnim.pos.y += velocity * deltaTime; 
 obPos.x += obVel * deltaTime; 
 ClearBackground(WHITE); 
-	if (collision){
+	if (collision){DrawText("Birdy Died!!",290,200,30,BLACK);
 
 	}
 	else{
